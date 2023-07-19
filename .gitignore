@@ -12,3 +12,4 @@ bin/golangci-lint.exe
 gomod-sync/gomod-sync
 gomod-sync/gomod-sync.exe
 gomod-sync/vendor
+.vscode/settings.json

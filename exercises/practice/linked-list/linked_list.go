@@ -3,42 +3,136 @@ package linkedlist
 // Define List and Node types here.
 // Note: The tests expect Node type to include an exported field with name Value to pass.
 
+import (
+	"log"
+	"errors"
+)
+
+type Node struct {
+	Value int
+	next *Node
+	prev *Node
+}
+
+type List struct {
+	head *Node
+	tail *Node
+}
+
 func NewList(elements ...interface{}) *List {
-	panic("Please implement the NewList function")
+	list := new(List)
+	if elements == nil {
+		return list
+	}
+
+	for _, el := range elements {
+		list.Push(el)
+	}
+
+	return list
 }
 
 func (n *Node) Next() *Node {
-	panic("Please implement the Next function")
+	return n.next
 }
 
 func (n *Node) Prev() *Node {
-	panic("Please implement the Prev function")
+	return n.prev
 }
 
 func (l *List) Unshift(v interface{}) {
-	panic("Please implement the Unshift function")
+	switch v.(type) {
+	case int:
+		if l.head == nil {
+			l.head = new(Node)
+			l.head.Value = v.(int)
+			l.tail = l.head
+		} else {
+			item := new(Node)
+			item.Value = v.(int)
+			item.next = l.head
+			l.head.prev = item
+			l.head = item
+		}
+	default:
+		log.Fatalf("Unknown type. Got: %T", v)
+	}
 }
 
 func (l *List) Push(v interface{}) {
-	panic("Please implement the Push function")
+	switch v.(type) {
+	case int:
+		if l.head == nil {
+			l.head = new(Node)
+			l.head.Value = v.(int)
+			l.tail = l.head
+		} else {
+			item := new(Node)
+			item.Value = v.(int)
+			item.prev = l.tail
+			l.tail.next = item
+			l.tail = item
+		}
+	default:
+		log.Fatalf("Unknown type. Got: %T", v)
+	}	
 }
 
 func (l *List) Shift() (interface{}, error) {
-	panic("Please implement the Shift function")
+	if l.head == nil {
+		return nil, errors.New("List is empty")
+	}
+
+	if l.head == l.tail {
+		l.tail = nil
+	}
+
+	item := l.head
+	l.head = item.next
+
+	if l.head != nil {
+		l.head.prev = nil
+	}
+
+	return item.Value, nil
 }
 
 func (l *List) Pop() (interface{}, error) {
-	panic("Please implement the Pop function")
+	if l.head == nil {
+		return nil, errors.New("List is empty")
+	}
+
+	if l.head == l.tail {
+		l.head = nil
+	}
+
+	item := l.tail
+	l.tail = item.prev
+
+	if l.tail != nil {
+		l.tail.next = nil
+	}
+
+	return item.Value, nil
 }
 
 func (l *List) Reverse() {
-	panic("Please implement the Reverse function")
+	for item := l.head; item != nil; {
+		next := item.next
+		item.next = item.prev
+		item.prev = next
+		item = item.prev
+	}
+
+	head := l.head
+	l.head = l.tail
+	l.tail = head
 }
 
 func (l *List) First() *Node {
-	panic("Please implement the First function")
+	return l.head
 }
 
 func (l *List) Last() *Node {
-	panic("Please implement the Last function")
+	return l.tail
 }

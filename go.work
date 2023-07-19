@@ -1,0 +1,7 @@
+go 1.20
+
+use  (
+    ./exercises/practice/bob
+    ./exercises/practice/binary-search-tree
+    ./exercises/practice/binary
+)
